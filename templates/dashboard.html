@@ -1,0 +1,44 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<br><br>
+<h1>1) Количество студентов в группе каждого университета и факультета (pie plot)</h1>
+<hr>
+<h2>Search panel:</h2>
+<form class="form"  method = post >
+
+    <table>
+        <thead>
+        <tr>
+            <th scope="col">{{student_form.university.label}}</th>
+            <th scope="col">{{student_form.faculty.label}}</th>
+            <th scope="col">{{student_form.group.label}}</th>
+            <th scope="col">{{student_form.name.label}}</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td> {{student_form.university(class_="form-control")}}</td>
+                <td> {{student_form.faculty(class_="form-control")}}</td>
+                <td> {{student_form.group(class_="form-control")}}</td>
+                <td> {{student_form.name(class_="form-control")}}</td>
+                <td> {{student_form.submit(class_="btn btn-success") }}</td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<hr>
+<h2>Plots:</h2>
+<div id="pie">
+    {% for label in pie_labels %}
+    <h3>{{label}}</h3>
+
+
+    <div id="{{label}}" class="bar">
+    </div>
+
+    {% endfor %}
+</div>
+<hr>
+{% endblock %}
