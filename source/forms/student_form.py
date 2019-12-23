@@ -1,5 +1,5 @@
 from flask_wtf import Form
-from wtforms import StringField, SubmitField, DateField, HiddenField
+from wtforms import StringField, SubmitField, HiddenField, IntegerField
 from wtforms import validators
 from datetime import date
 
@@ -23,5 +23,7 @@ class StudentForm(Form):
     student_faculty = StringField("faculty: ", [
         validators.DataRequired("Please enter student faculty."),
         validators.Length(3, 255, "Context should be from 3 to 255 symbols")])
+
+    house_id = IntegerField("house_id: ")
 
     submit = SubmitField("Save")

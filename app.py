@@ -7,6 +7,7 @@ from sqlalchemy import func
 from source.forms.student_form import StudentForm
 from source.forms.group_form import GroupForm
 from source.forms.discipline_form import DisciplineForm
+from source.forms.house_form import HouseForm
 from source.forms.search_student_form import StudentSearchForm
 import json
 import plotly
@@ -80,7 +81,7 @@ def new_student():
         else:
             id = list(db.sqlalchemy_session.query(func.max(Student.student_id)))[0][0]
             student_obj = Student(
-                student_id = id + 1,
+                student_id = id  + 1,
                 student_university=form.student_university.data,
                 student_faculty=form.student_faculty.data,
                 student_group=form.student_group.data,
@@ -331,6 +332,104 @@ def delete_discipline():
 
 # END discipline ORIENTED QUERIES ----------------------------------------------------------------------------------------
 
+# STUDENT ORIENTED QUERIES --------------------------------------------------------------------------------------------
+
+
+@app.route('/house', methods=['GET'])
+def index_house():
+    db = PostgresDb()
+
+    deleted = request.args.get('deleted')
+
+    if deleted:
+        result = db.sqlalchemy_session.query(House).all()
+    else:
+        result = db.sqlalchemy_session.query(House).all()
+        deleted = False
+
+    return render_template('house.html', houses=result, deleted=deleted)
+
+
+@app.route('/new_house', methods=['GET', 'POST'])
+def new_house():
+    form = HouseForm()
+    db = PostgresDb()
+
+    if request.method == 'POST':
+        if not form.validate():
+            return render_template('house_form.html', form=form, form_name="New house", action="new_house")
+        else:
+            id = list(db.sqlalchemy_session.query(func.max(House.house_id)))[0][0]
+            house_obj = House(
+                house_id = id  + 1,
+                address=form.address.data,
+                price=form.price.data,
+                floor_count=form.floor_count.data,
+                year=form.year.data)
+
+            db.sqlalchemy_session.add(house_obj)
+            db.sqlalchemy_session.commit()
+
+            return redirect(url_for('index_house'))
+
+    return render_template('house_form.html', form=form, form_name="New house", action="new_house")
+
+
+@app.route('/edit_house', methods=['GET', 'POST'])
+def edit_house():
+    form = HouseForm()
+
+    if request.method == 'GET':
+
+        house_id = request.args.get('house_id')
+        db = PostgresDb()
+        house = db.sqlalchemy_session.query(House).filter(House.house_id == house_id).one()
+
+        # fill form and send to house
+        form.house_id.data = house.house_id
+        form.address.data = house.address
+        form.price.data = house.price
+        form.floor_count.data = house.floor_count
+        form.year.data = house.year
+
+        return render_template('house_form.html', form=form, form_name="Edit house", action="edit_house")
+
+    else:
+
+        if not form.validate():
+            return render_template('house_form.html', form=form, form_name="Edit house", action="edit_house")
+        else:
+            db = PostgresDb()
+            # find house
+            house = db.sqlalchemy_session.query(House).filter(House.house_id == form.house_id.data).one()
+
+            # update fields from form data
+            house.house_id = form.house_id.data
+            house.address = form.address.data
+            house.price = form.price.data
+            house.floor_count = form.floor_count.data
+            house.year = form.year.data
+
+            db.sqlalchemy_session.commit()
+
+            return redirect(url_for('index_house'))
+
+
+@app.route('/delete_house')
+def delete_house():
+    house_id = request.args.get('house_id')
+
+    db = PostgresDb()
+
+    result = db.sqlalchemy_session.query(House).filter(House.house_id == house_id).one()
+
+    db.sqlalchemy_session.delete(result)
+    db.sqlalchemy_session.commit()
+
+    return redirect(url_for('index_house'))
+
+
+# END STUDENT ORIENTED QUERIES ----------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -31,13 +31,11 @@
                         Edit
                     </button>
                 </a>
-                {% if not student.student_date_expelled %}
                 <a href="/delete_student?student_id={{student.student_id}}" title="delete button">
                     <button type="button" class="btn btn-danger" name="btn_delete_user" data-user_id="{{student.student_id}}">
                         Delete
                     </button>
                 </a>
-                {% endif %}
             </td>
         </tr>
         {% endfor %}

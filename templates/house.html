@@ -1,0 +1,55 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">house id</th>
+            <th scope="col">address</th>
+            <th scope="col">price</th>
+            <th scope="col">floor count</th>
+            <th scope="col">year</th>
+{#            {% endif %}#}
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for house in houses%}
+        <tr>
+            <td> {{house.house_id}}</td>
+            <td> {{house.address}}</td>
+            <td> {{house.price}}</td>
+            <td> {{house.floor_count}}</td>
+            <td> {{house.year}}</td>
+{#            {% endif %}#}
+            <td>
+                <a href="/edit_house?house_id={{house.house_id}}" title="edit button">
+                    <button type="button" class="btn btn-warning" name="btn_edit_user" data-user_id="{{house.house_id}}">
+                        Edit
+                    </button>
+                </a>
+                <a href="/delete_house?house_id={{house.house_id}}" title="delete button">
+                    <button type="button" class="btn btn-danger" name="btn_delete_user" data-user_id="{{house.house_id}}">
+                        Delete
+                    </button>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td>
+                <a href="/new_house" title="new house button">
+                    <button type="button" class="btn btn-success" name="btn_new_house">New house</button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!--<script src="{{ url_for('static', filename='js/skill.js') }}"></script>-->
+
+{% endblock %}
