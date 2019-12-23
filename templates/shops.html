@@ -1,0 +1,41 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">name car</th>
+                <th scope="col">color</th>
+                <th scope="col">model</th>
+                <th scope="col">price</th>
+                <th scope="col">year</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for user in car_name %}
+                <tr>
+                    <td> {{ user.car_name }} </td>
+                    <td> {{user.color }} </td>
+                    <td> {{user.model}} </td>
+                    <td> {{user.price}} </td>
+                    <td> {{user.year}} </td>
+                    <td>
+                        <a href="/edit_shops/{{user.car_name }} " type="button" class="btn btn-warning" name="btn_edit_student" data-user_id="{{user.car_name}}">Edit</a>
+                        <a href="/delete_shops/{{user.car_name }} " type="button" class="btn btn-danger" name="btn_delete_student" data-user_id="{{user.car_name}}">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td><a href="/new_shops" type="button" class="btn btn-success" name="btn_new_student">New Car</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+{% endblock %}
